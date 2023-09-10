@@ -1,6 +1,8 @@
 import Avatar from "@/components/Avatar"
 import { EmojiIcon, GifIcon, LocationIcon, MediaIcon, PollIcon, ScheduleIcon } from "@/components/Icons"
+import Post from "@/components/Post"
 import Rune from "@/components/Rune"
+import { posts } from "@/constants/post"
 import { ViewBoardsIcon } from '@heroicons/react/solid'
 
 export default function Home() {
@@ -56,6 +58,11 @@ export default function Home() {
             </>
           </div>
         </div>
+      </section>
+      <section>
+        {posts.map((post) => (
+          <Post key={post.id} post={post} replies={post.replies} retweets={post.retweets} likes={post.likes} />
+        ))}
       </section>
     </div>
   )
