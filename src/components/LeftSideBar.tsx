@@ -1,0 +1,64 @@
+import {
+    BellIcon,
+    BookmarkIcon,
+    DotsCircleHorizontalIcon,
+    HashtagIcon,
+    MailIcon,
+    UserIcon,
+    ViewListIcon,
+} from '@heroicons/react/outline'
+import { DotsHorizontalIcon, HomeIcon } from '@heroicons/react/solid'
+import Image from 'next/image'
+import Avatar from './Avatar'
+import Path from './Path'
+
+export default function LeftSideBar() {
+    return (
+        <div className='fixed'>
+            <div>
+                <nav className="flex-col gap-5 px-2 py-4 min-h-screen justify-between items-center hidden tablet:flex">
+                    <div className="flex flex-col gap-5 items-center desktop:items-stretch w-full">
+                        <div className="px-4">
+                            <div className='w-7 h-7'>
+                                <Image src='/twitter-logo.png' alt="Logo" className="w-full" width={1000} height={1000} />
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            <Path Icon={HomeIcon} name="Home" active={true} />
+                            <Path Icon={HashtagIcon} name="Explore" active={false} />
+                            <Path Icon={BellIcon} name="Notifications" active={false} />
+                            <Path Icon={MailIcon} name="Messages" active={false} />
+                            <Path Icon={BookmarkIcon} name="Bookmarks" active={false} />
+                            <Path Icon={ViewListIcon} name="Lists" active={false} />
+                            <Path Icon={UserIcon} name="Profile" active={false} />
+                            <Path Icon={DotsCircleHorizontalIcon} name="More" active={false} />
+                        </div>
+                        <button className="bg-sky-500 p-3 desktop:py-4 text-base font-bold text-white rounded-full max-w-[13.75rem] hover:bg-sky-400 hover-transition">
+                            <span className="desktop:block hidden">Tweet</span>
+                            <div className="desktop:hidden w-6 h-6">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" fill="#F8FAFC">
+                                    <g>
+                                        <path d="M8.8 7.2H5.6V3.9c0-.4-.3-.8-.8-.8s-.7.4-.7.8v3.3H.8c-.4 0-.8.3-.8.8s.3.8.8.8h3.3v3.3c0 .4.3.8.8.8s.8-.3.8-.8V8.7H9c.4 0 .8-.3.8-.8s-.5-.7-1-.7zm15-4.9v-.1h-.1c-.1 0-9.2 1.2-14.4 11.7-3.8 7.6-3.6 9.9-3.3 9.9.3.1 3.4-6.5 6.7-9.2 5.2-1.1 6.6-3.6 6.6-3.6s-1.5.2-2.1.2c-.8 0-1.4-.2-1.7-.3 1.3-1.2 2.4-1.5 3.5-1.7.9-.2 1.8-.4 3-1.2 2.2-1.6 1.9-5.5 1.8-5.7z"></path>
+                                    </g>
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                    <div className="flex items-center justify-between desktop:w-[17rem] hover:bg-neutral-200 desktop:px-4 px-3 py-3 rounded-full hover-transition cursor-pointer">
+                        <div className="flex items-center gap-4">
+                            <Avatar
+                                src='https://avatars.githubusercontent.com/u/84142253?v=4'
+                                alt="Profile"
+                            />
+                            <div className='desktop:block hidden'>
+                                <h1 className="font-bold text-lg">Khris B.</h1>
+                                <h2 className="text-neutral-500 -mt-1">@khris-xp</h2>
+                            </div>
+                        </div>
+                        <DotsHorizontalIcon className="w-4 h-4 text-neutral-500 desktop:block hidden" />
+                    </div>
+                </nav>
+            </div>
+        </div>
+    )
+}
