@@ -1,8 +1,10 @@
 import Avatar from "@/components/Avatar"
+import Follow from "@/components/Follow"
 import { EmojiIcon, GifIcon, LocationIcon, MediaIcon, PollIcon, ScheduleIcon } from "@/components/Icons"
 import Post from "@/components/Post"
 import Rune from "@/components/Rune"
 import Trend from "@/components/Trend"
+import { follow } from "@/constants/follow"
 import { posts } from "@/constants/post"
 import trends from "@/constants/trend"
 import { SearchIcon } from '@heroicons/react/outline'
@@ -80,7 +82,7 @@ export default function Home() {
             />
           </div>
         </section>
-        <section className="bg-gray-100 py-4 rounded-2xl sticky -top-80">
+        <section className="bg-gray-50 py-4 rounded-2xl -top-80">
           <h1 className="text-[1.25rem] font-black px-4 pb-4">Trends For You</h1>
           <div>
             {trends.map((trend) => (
@@ -88,6 +90,24 @@ export default function Home() {
             ))}
           </div>
         </section>
+        <section className="bg-gray-50 py-4 rounded-2xl sticky -top-80">
+          <h1 className="text-[1.25rem] font-black px-4 pb-4">Who to follow</h1>
+          <div>
+            {follow.map((follow) => (
+              <Follow key={follow.id} follow={follow} />
+            ))}
+          </div>
+        </section >
+        <div className="flow-root m-6">
+          <div className="flex-1">
+            <a href="#">
+              <p className="text-sm leading-6 font-medium text-gray-500">Terms Privacy Policy Cookies Imprint Ads info</p>
+            </a>
+          </div>
+          <div className="flex-2">
+            <p className="text-sm leading-6 font-medium text-gray-600">© 2023 X Corp.</p>
+          </div>
+        </div>
       </div>
     </>
   )
