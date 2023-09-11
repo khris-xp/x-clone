@@ -1,3 +1,7 @@
+"use client"
+
+import { IUser } from '@/interfaces/user'
+import { authService } from '@/services/auth.service'
 import {
     BellIcon,
     BookmarkIcon,
@@ -9,10 +13,25 @@ import {
 } from '@heroicons/react/outline'
 import { DotsHorizontalIcon, HomeIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import Avatar from './Avatar'
 import Path from './Path'
 
 export default function LeftSideBar() {
+    let [userData, setUserData] = useState<IUser | null>(null);
+    const fecthUserProfile = async () => {
+        try {
+            const response = await authService.getUserProfile();
+            setUserData(response);
+        } catch (error) {
+            const message = (error as Error).message;
+            throw new Error(message);
+        }
+    }
+
+    useEffect(() => {
+        fecthUserProfile();
+    }, [])
     return (
         <div className='fixed'>
             <div>
@@ -46,13 +65,10 @@ export default function LeftSideBar() {
                     </div>
                     <div className="flex items-center justify-between desktop:w-[17rem] hover:bg-neutral-200 desktop:px-4 px-3 py-3 rounded-full hover-transition cursor-pointer">
                         <div className="flex items-center gap-4">
-                            <Avatar
-                                src='https://avatars.githubusercontent.com/u/84142253?v=4'
-                                alt="Profile"
-                            />
+                            {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} /> : <Avatar src='https://avatars.githubusercontent.com/u/84142253?v=4' alt='user-profile' />}
                             <div className='desktop:block hidden'>
-                                <h1 className="font-bold text-lg">Khris B.</h1>
-                                <h2 className="text-neutral-500 -mt-1">@khris-xp</h2>
+                                <h1 className="font-bold text-lg">{userData?.email}</h1>
+                                <h2 className="text-neutral-500 -mt-1">@{userData?.username}</h2>
                             </div>
                         </div>
                         <DotsHorizontalIcon className="w-4 h-4 text-neutral-500 desktop:block hidden" />

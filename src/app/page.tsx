@@ -1,3 +1,5 @@
+"use client"
+
 import Avatar from "@/components/Avatar"
 import Follow from "@/components/Follow"
 import { EmojiIcon, GifIcon, LocationIcon, MediaIcon, PollIcon, ScheduleIcon } from "@/components/Icons"
@@ -8,10 +10,28 @@ import Trend from "@/components/Trend"
 import { follow } from "@/constants/follow"
 import { posts } from "@/constants/post"
 import trends from "@/constants/trend"
+import { IUser } from "@/interfaces/user"
+import { authService } from "@/services/auth.service"
 import { SearchIcon } from '@heroicons/react/outline'
 import { ViewBoardsIcon } from '@heroicons/react/solid'
+import { useEffect, useState } from "react"
 
 export default function Home() {
+  let [userData, setUserData] = useState<IUser | null>(null);
+
+  const fecthUserProfile = async () => {
+    try {
+      const response = await authService.getUserProfile();
+      setUserData(response);
+    } catch (error) {
+      const message = (error as Error).message;
+      throw new Error(message);
+    }
+  }
+
+  useEffect(() => {
+    fecthUserProfile();
+  }, [])
   return (
     <>
       <div className="grid-cols-[auto,1fr] desktop:max-w-7xl laptop:max-w-5xl max-w-2xl mx-auto">
@@ -23,10 +43,9 @@ export default function Home() {
                 <h1 className="text-[1.25rem] font-bold">Home</h1>
               </section>
               <section className="px-4 py-4 grid grid-cols-[auto,1fr] gap-4 ">
-                <Avatar
-                  src="https://avatars.githubusercontent.com/u/84142253?v=4"
-                  alt="Profile"
-                />
+                {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} />
+                  : <Avatar src="https://avatars.githubusercontent.com/u/84142253?v=4" alt="Avatar" />
+                }
                 <div className="space-y-10 w-full">
                   <div className="flex-1">
                     <input
