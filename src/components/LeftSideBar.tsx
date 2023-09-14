@@ -65,7 +65,7 @@ export default function LeftSideBar() {
                     </div>
                     <div className="flex items-center justify-between desktop:w-[17rem] hover:bg-neutral-200 desktop:px-4 px-3 py-3 rounded-full hover-transition cursor-pointer">
                         <div className="flex items-center gap-4">
-                            {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} /> : <Avatar src='https://avatars.githubusercontent.com/u/84142253?v=4' alt='user-profile' />}
+                            {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} /> : <Avatar src='https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png' alt='user-profile' />}
                             <div className='desktop:block hidden'>
                                 <h1 className="font-bold text-lg">{userData?.email}</h1>
                                 <h2 className="text-neutral-500 -mt-1">@{userData?.username}</h2>

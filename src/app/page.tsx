@@ -10,14 +10,17 @@ import Trend from "@/components/Trend"
 import { follow } from "@/constants/follow"
 import { posts } from "@/constants/post"
 import trends from "@/constants/trend"
+import { ITweet } from "@/interfaces/tweet"
 import { IUser } from "@/interfaces/user"
 import { authService } from "@/services/auth.service"
+import { tweetService } from "@/services/tweet.service"
 import { SearchIcon } from '@heroicons/react/outline'
 import { ViewBoardsIcon } from '@heroicons/react/solid'
 import { useEffect, useState } from "react"
 
 export default function Home() {
   let [userData, setUserData] = useState<IUser | null>(null);
+  let [tweetData, setTweetData] = useState<ITweet[]>([]);
 
   const fecthUserProfile = async () => {
     try {
@@ -29,8 +32,19 @@ export default function Home() {
     }
   }
 
+  const fecthTweet = async (): Promise<void> => {
+    try {
+      const response = await tweetService.getTweets();
+      setTweetData(response.tweets);
+    } catch (error) {
+      const message = (error as Error).message;
+      throw new Error(message);
+    }
+  }
+
   useEffect(() => {
     fecthUserProfile();
+    fecthTweet();
   }, [])
   return (
     <>
@@ -44,7 +58,7 @@ export default function Home() {
               </section>
               <section className="px-4 py-4 grid grid-cols-[auto,1fr] gap-4 ">
                 {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} />
-                  : <Avatar src="https://avatars.githubusercontent.com/u/84142253?v=4" alt="Avatar" />
+                  : <Avatar src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="Avatar" />
                 }
                 <div className="space-y-10 w-full">
                   <div className="flex-1">
@@ -90,8 +104,8 @@ export default function Home() {
                 </div>
               </section>
               <section>
-                {posts.map((post) => (
-                  <Post key={post.id} post={post} replies={post.replies} retweets={post.retweets} likes={post.likes} />
+                {tweetData.map((post) => (
+                  <Post key={post._id} post={post} replies={0} retweets={post.retweets.length} likes={post.likes.length} />
                 ))}
               </section>
             </div>
