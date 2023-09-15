@@ -20,11 +20,6 @@ import axios from "axios"
 import Cookies from "js-cookie"
 import { useEffect, useState } from "react"
 
-interface IImages {
-  public_id: string;
-  url: string
-}
-
 export default function Home() {
   let [userData, setUserData] = useState<IUser | null>(null);
   let [tweetData, setTweetData] = useState<ITweet[]>([]);
