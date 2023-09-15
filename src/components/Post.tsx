@@ -1,10 +1,8 @@
-"use client"
-
 import { formatDateDifference } from "@/hooks/format";
 import { ITweet } from "@/interfaces/tweet";
 import { IUser } from "@/interfaces/user";
 import { authService } from "@/services/auth.service";
-import { DotsHorizontalIcon } from '@heroicons/react/outline';
+import FilmIcon, { DotsHorizontalIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
@@ -21,7 +19,7 @@ interface Props {
 export default function Post({ post, replies, retweets, likes }: Props) {
     let [userData, setUserData] = useState<IUser | null>(null);
 
-    const fetchUserById = async (id: string) => {
+    const fetchUserById = async (id: string): Promise<void> => {
         try {
             const response = await authService.getUserById(id);
             setUserData(response);
@@ -35,7 +33,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
         fetchUserById(post.createdBy);
     }, [post.createdBy]);
 
-    const styledDesc: string = post.desc.replace(/#(\w+)/g, '<span class="text-blue-500">#$1</span>');
+    const styledDesc: string = post?.desc?.replace(/#(\w+)/g, '<span class="text-blue-500">#$1</span>');
     return (
         <div className="border-t-[1px] px-4 pt-3 pb-2 hover:bg-neutral-100 transition-colors duration-500 ease-out">
             <div className="grid grid-cols-[auto,1fr] gap-3">

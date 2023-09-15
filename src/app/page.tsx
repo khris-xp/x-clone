@@ -8,19 +8,31 @@ import Post from "@/components/Post"
 import Rune from "@/components/Rune"
 import Trend from "@/components/Trend"
 import { follow } from "@/constants/follow"
-import { posts } from "@/constants/post"
 import trends from "@/constants/trend"
-import { ITweet } from "@/interfaces/tweet"
+import { ITweet, ITweetRequest } from "@/interfaces/tweet"
 import { IUser } from "@/interfaces/user"
+import { baseUrl } from "@/secret/path"
 import { authService } from "@/services/auth.service"
 import { tweetService } from "@/services/tweet.service"
 import { SearchIcon } from '@heroicons/react/outline'
 import { ViewBoardsIcon } from '@heroicons/react/solid'
+import axios from "axios"
+import Cookies from "js-cookie"
+import Image from "next/image"
 import { useEffect, useState } from "react"
+
+interface IImages {
+  public_id: string;
+  url: string
+}
 
 export default function Home() {
   let [userData, setUserData] = useState<IUser | null>(null);
   let [tweetData, setTweetData] = useState<ITweet[]>([]);
+  let [tweet, setTweet] = useState<ITweetRequest>({
+    desc: '',
+    img: ''
+  });
 
   const fecthUserProfile = async () => {
     try {
@@ -36,6 +48,51 @@ export default function Home() {
     try {
       const response = await tweetService.getTweets();
       setTweetData(response.tweets);
+    } catch (error) {
+      const message = (error as Error).message;
+      throw new Error(message);
+    }
+  }
+
+  const handleCreateTweet = async (tweet: ITweetRequest): Promise<void> => {
+    try {
+      const response = await tweetService.createTweets(tweet);
+      setTweetData([...tweetData, response]);
+      window.location.reload()
+    } catch (error) {
+      const message = (error as Error).message;
+      throw new Error(message);
+    }
+  }
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const files = e.target.files;
+
+      if (!files) return alert("File not exist.")
+
+      const file = files[0];
+
+      if (!file) return alert("File not exist.")
+
+      if (file.size > 1024 * 1024)
+        return alert("Size too large!")
+
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png')
+        return alert("File format is incorrect.")
+
+      let formData = new FormData();
+      formData.append('file', file);
+
+      const token = Cookies.get("token");
+
+      const response = await axios.post(`${baseUrl}/api/upload`, formData, {
+        headers: { 'content-type': 'multipart/form-data', Authorization: token }
+      })
+      setTweet(prevTweet => ({
+        ...prevTweet,
+        img: response.data.url
+      }));
     } catch (error) {
       const message = (error as Error).message;
       throw new Error(message);
@@ -66,6 +123,7 @@ export default function Home() {
                       type="text"
                       placeholder="What's happening?"
                       className="w-full text-[1.25rem] focus:outline-none"
+                      onChange={(e) => setTweet({ ...tweet, desc: e.target.value })}
                     />
                   </div>
                   <div className="flex items-center justify-between gap-4">
@@ -74,10 +132,15 @@ export default function Home() {
                     </div>
                     <>
                       <div className="mobile:flex items-center hidden ">
-                        <Rune
-                          Icon={<MediaIcon fill="fill-sky-500" />}
-                          color="hover:bg-sky-100"
-                        />
+                        <label htmlFor="file-input">
+                          <Rune Icon={<MediaIcon fill="fill-sky-500" />} color="hover:bg-sky-100" />
+                          <input
+                            type="file"
+                            id="file-input"
+                            className="hidden"
+                            onChange={handleUpload}
+                          />
+                        </label>
                         <Rune Icon={<GifIcon fill="fill-sky-500" />} color="hover:bg-sky-100" />
                         <Rune
                           Icon={<PollIcon fill="fill-sky-500" />}
@@ -96,7 +159,7 @@ export default function Home() {
                           color="hover:bg-sky-100"
                         />
                       </div>
-                      <button className="bg-sky-500 hover:bg-sky-400 hover-transition px-5 py-2 text-white font-bold rounded-full w-full mobile:w-auto">
+                      <button onClick={() => handleCreateTweet(tweet)} className="bg-sky-500 hover:bg-sky-400 hover-transition px-5 py-2 text-white font-bold rounded-full w-full mobile:w-auto">
                         Tweet
                       </button>
                     </>
@@ -105,7 +168,7 @@ export default function Home() {
               </section>
               <section>
                 {tweetData.map((post) => (
-                  <Post key={post._id} post={post} replies={0} retweets={post.retweets.length} likes={post.likes.length} />
+                  <Post key={post._id} post={post} replies={0} retweets={post?.retweets?.length} likes={post?.likes?.length} />
                 ))}
               </section>
             </div>

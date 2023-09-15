@@ -13,3 +13,12 @@ export interface ITweet {
     updatedAt: string;
     __v: number;
 }
+
+export interface ITweetResponse {
+    msg: string;
+}
+
+export interface ITweetRequest {
+    desc: string;
+    img?: string;
+}

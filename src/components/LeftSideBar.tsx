@@ -24,8 +24,7 @@ export default function LeftSideBar() {
             const response = await authService.getUserProfile();
             setUserData(response);
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            window.location.href = '/login';
         }
     }
 
@@ -67,7 +66,7 @@ export default function LeftSideBar() {
                         <div className="flex items-center gap-4">
                             {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} /> : <Avatar src='https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png' alt='user-profile' />}
                             <div className='desktop:block hidden'>
-                                <h1 className="font-bold text-lg">{userData?.email}</h1>
+                                <h1 className="font-bold text-lg">{userData?.fullName ? userData.fullName : 'AI User'}</h1>
                                 <h2 className="text-neutral-500 -mt-1">@{userData?.username}</h2>
                             </div>
                         </div>
