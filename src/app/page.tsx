@@ -18,7 +18,6 @@ import { SearchIcon } from '@heroicons/react/outline'
 import { ViewBoardsIcon } from '@heroicons/react/solid'
 import axios from "axios"
 import Cookies from "js-cookie"
-import Image from "next/image"
 import { useEffect, useState } from "react"
 
 interface IImages {

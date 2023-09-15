@@ -7,4 +7,10 @@ export const tweetService: ITweetService = {
         apiRequest<ITweetData>('/api/tweet', 'get'),
     createTweets: async (data: ITweetRequest): Promise<ITweetResponse> =>
         apiRequest<ITweetResponse>('/api/tweet', 'post', data),
+    updateTweets: async (id: string, data: ITweetRequest): Promise<ITweetResponse> =>
+        apiRequest<ITweetResponse>(`/api/tweet/${id}`, 'put', data),
+    deleteTweet: async (id: string): Promise<ITweetResponse> =>
+        apiRequest<ITweetResponse>(`/api/tweet/${id}`, 'delete'),
+    likeTweet: async (id: string): Promise<ITweetResponse> =>
+        apiRequest<ITweetResponse>(`/api/tweet/${id}/like`, 'post'),
 };

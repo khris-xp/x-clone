@@ -12,6 +12,7 @@ import {
     ViewListIcon,
 } from '@heroicons/react/outline'
 import { DotsHorizontalIcon, HomeIcon } from '@heroicons/react/solid'
+import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Avatar from './Avatar'
@@ -26,6 +27,11 @@ export default function LeftSideBar() {
         } catch (error) {
             window.location.href = '/login';
         }
+    }
+
+    const logout = (): void => {
+        Cookies.remove('token');
+        window.location.href = '/login';
     }
 
     useEffect(() => {
@@ -62,7 +68,7 @@ export default function LeftSideBar() {
                             </div>
                         </button>
                     </div>
-                    <div className="flex items-center justify-between desktop:w-[17rem] hover:bg-neutral-200 desktop:px-4 px-3 py-3 rounded-full hover-transition cursor-pointer">
+                    <button onClick={() => logout()} className='flex items-center justify-between desktop:w-[17rem] hover:bg-neutral-200 desktop:px-4 px-3 py-3 rounded-full hover-transition cursor-pointer'>
                         <div className="flex items-center gap-4">
                             {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} /> : <Avatar src='https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png' alt='user-profile' />}
                             <div className='desktop:block hidden'>
@@ -71,9 +77,9 @@ export default function LeftSideBar() {
                             </div>
                         </div>
                         <DotsHorizontalIcon className="w-4 h-4 text-neutral-500 desktop:block hidden" />
-                    </div>
+                    </button>
                 </nav>
             </div>
-        </div>
+        </div >
     )
 }

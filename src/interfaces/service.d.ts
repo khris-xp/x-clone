@@ -7,5 +7,8 @@ export interface IAuthService {
 
 export interface ITweetService {
     getTweets: () => Promise<ITweetData>;
-    createTweets: (data) => Promise<ITweetResponse>;
+    createTweets: (data: ITweetRequest) => Promise<ITweetResponse>;
+    updateTweets: (id: string, data: ITweetRequest) => Promise<ITweetResponse>;
+    deleteTweet: (id: string) => Promise<ITweetResponse>;
+    likeTweet: (id: string) => Promise<ITweetResponse>;
 }
