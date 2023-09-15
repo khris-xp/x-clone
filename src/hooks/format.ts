@@ -23,3 +23,10 @@ export function formatDateDifference(dateString: string): string {
 
     return formattedDate;
 }
+
+export function formatJoinedDate(date: string) {
+    const inputDate = new Date(date);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+    const formattedDate = inputDate.toLocaleDateString('en-US', options);
+    return formattedDate;
+}

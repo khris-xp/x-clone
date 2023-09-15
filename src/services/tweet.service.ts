@@ -5,6 +5,8 @@ import { apiRequest } from "@/repositories/api.repository";
 export const tweetService: ITweetService = {
     getTweets: async (): Promise<ITweetData> =>
         apiRequest<ITweetData>('/api/tweet', 'get'),
+    getTweetByUser: async (id: string | undefined): Promise<ITweetData> =>
+        apiRequest<ITweetData>(`/api/tweet/user/${id}`, 'get'),
     createTweets: async (data: ITweetRequest): Promise<ITweetResponse> =>
         apiRequest<ITweetResponse>('/api/tweet', 'post', data),
     updateTweets: async (id: string, data: ITweetRequest): Promise<ITweetResponse> =>
