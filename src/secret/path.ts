@@ -1,0 +1,1 @@
+export const baseUrl = 'https://x-clone-api-production.up.railway.app/';
