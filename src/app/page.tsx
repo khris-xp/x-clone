@@ -22,6 +22,7 @@ import { useEffect, useState } from "react"
 
 export default function Home() {
   let [userData, setUserData] = useState<IUser | null>(null);
+  const [createTweet, setCreateTweet] = useState<boolean>(false);
   let [tweetData, setTweetData] = useState<ITweet[]>([]);
   let [tweet, setTweet] = useState<ITweetRequest>({
     desc: '',
@@ -33,8 +34,7 @@ export default function Home() {
       const response = await authService.getUserProfile();
       setUserData(response);
     } catch (error) {
-      const message = (error as Error).message;
-      throw new Error(message);
+      window.location.href = '/login'
     }
   }
 
@@ -43,8 +43,7 @@ export default function Home() {
       const response = await tweetService.getTweets();
       setTweetData(response.tweets);
     } catch (error) {
-      const message = (error as Error).message;
-      throw new Error(message);
+      window.location.href = '/login'
     }
   }
 
@@ -54,8 +53,7 @@ export default function Home() {
       setTweetData([...tweetData, response]);
       window.location.reload()
     } catch (error) {
-      const message = (error as Error).message;
-      throw new Error(message);
+      console.log(error)
     }
   }
 
@@ -80,7 +78,7 @@ export default function Home() {
 
       const token = Cookies.get("token");
 
-      const response = await axios.post(`${baseUrl}/api/upload`, formData, {
+      const response = await axios.post(`${baseUrl}api/upload`, formData, {
         headers: { 'content-type': 'multipart/form-data', Authorization: token }
       })
       setTweet(prevTweet => ({
@@ -88,15 +86,19 @@ export default function Home() {
         img: response.data.url
       }));
     } catch (error) {
-      const message = (error as Error).message;
-      throw new Error(message);
+      console.log(error)
     }
   }
 
   useEffect(() => {
     fecthUserProfile();
     fecthTweet();
-  }, [])
+    if (tweet.desc.length > 0) {
+      setCreateTweet(true);
+    } else {
+      setCreateTweet(false);
+    }
+  }, [tweet.desc])
   return (
     <>
       <div className="grid-cols-[auto,1fr] desktop:max-w-7xl laptop:max-w-5xl max-w-2xl mx-auto">
@@ -153,7 +155,7 @@ export default function Home() {
                           color="hover:bg-sky-100"
                         />
                       </div>
-                      <button onClick={() => handleCreateTweet(tweet)} className="bg-sky-500 hover:bg-sky-400 hover-transition px-5 py-2 text-white font-bold rounded-full w-full mobile:w-auto">
+                      <button onClick={() => handleCreateTweet(tweet)} disabled={!createTweet} className={`${createTweet ? 'bg-sky-500 hover:bg-sky-400' : 'bg-sky-300 hover:bg-sky-200'} hover-transition px-5 py-2 text-white font-bold rounded-full w-full mobile:w-auto`}>
                         Tweet
                       </button>
                     </>
