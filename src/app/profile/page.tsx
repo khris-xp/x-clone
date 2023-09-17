@@ -26,8 +26,7 @@ export default function Home() {
             const response = await authService.getUserProfile();
             setUserData(response);
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            console.log(error)
         }
     }
 
@@ -36,8 +35,7 @@ export default function Home() {
             const response = await tweetService.getTweetByUser(id);
             setTweetData(response.tweets);
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            console.log(error)
         }
     }
 

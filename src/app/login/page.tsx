@@ -28,8 +28,7 @@ export default function Loign() {
             setPassword("");
             router.push("/");
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            console.log(error)
         }
     }
     return (
@@ -54,7 +53,7 @@ export default function Loign() {
                                 type="submit" name="correo" id="">
                                 Login
                             </button>
-                            <p>Dont have an account? <Link className="font-semibold text-sky-700" href="/register">Register</Link> </p>
+                            <p>Dont have an account? <Link className="font-semibold text-sky-700 hover:underline" href="/register">Register</Link> </p>
                         </div>
                     </div>
                 </form>

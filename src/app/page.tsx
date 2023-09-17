@@ -86,6 +86,7 @@ export default function Home() {
         ...prevTweet,
         img: response.data.url
       }));
+      window.alert("Image uploaded successfully.")
     } catch (error) {
       console.log(error)
     }

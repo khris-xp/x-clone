@@ -9,10 +9,8 @@ export function formatDateDifference(dateString: string): string {
     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
     let formattedDate = '';
-    if (days === 0 && hours === 0) {
+    if (days === 0 && hours === 0 && minutes === 0) {
         formattedDate = `${minutes}min`;
-    } else if (days === 0 && hours === 0 && minutes === 0) {
-        formattedDate = `now`;
     } else if (days > 0) {
         formattedDate = `${days}d`;
     } else if (days === 0 && hours > 0) {

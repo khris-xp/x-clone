@@ -29,8 +29,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
             const response = await authService.getUserById(id);
             setUserData(response);
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            console.log(error)
         }
     }
 
@@ -39,8 +38,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
             const response = await authService.getUserProfile();
             setUser(response);
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            console.log(error)
         }
     }
 
@@ -49,8 +47,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
             await tweetService.likeTweet(id);
             window.location.reload()
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            console.log(error)
         }
     }
 
@@ -59,19 +56,18 @@ export default function Post({ post, replies, retweets, likes }: Props) {
             await tweetService.reTweet(id);
             window.location.reload()
         } catch (error) {
-            const message = (error as Error).message;
-            throw new Error(message);
+            console.log(error)
         }
     }
 
     useEffect(() => {
         fetchUserById(post.createdBy);
         setIsLiked((prevIsLiked) => {
-            const newIsLiked = post?.likes.some((like) => like === user?._id);
+            const newIsLiked = post?.likes?.some((like) => like === user?._id);
             return prevIsLiked !== newIsLiked ? newIsLiked : prevIsLiked;
         });
         setIsRetweeted((prevIsRetweeted) => {
-            const newIsRetweeted = post?.retweets.some((retweet) => retweet === user?._id);
+            const newIsRetweeted = post?.retweets?.some((retweet) => retweet === user?._id);
             return prevIsRetweeted !== newIsRetweeted ? newIsRetweeted : prevIsRetweeted;
         });
         fetchUser();
