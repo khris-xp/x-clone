@@ -81,7 +81,7 @@ export default function Home() {
                                         <div className="flex flex-1">
                                             <div className="-mt-24">
                                                 <div className="w-36 h-36 rounded-full relative">
-                                                    <Image className="w-36 h-36 rounded-full relative border border-gray-300" src={userData?.profilePicture ? userData.profilePicture : "https://pbs.twimg.com/profile_images/1254779846615420930/7I4kP65u_400x400.jpg"} width={1000} height={1000} alt="" />
+                                                    <Image className="w-36 h-36 rounded-full relative border border-gray-300" src={userData?.profilePicture ? userData.profilePicture : "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png"} width={1000} height={1000} alt="" />
                                                     <div className="absolute"></div>
                                                 </div>
                                             </div>

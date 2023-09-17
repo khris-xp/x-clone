@@ -21,6 +21,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
     let [userData, setUserData] = useState<IUser | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [isLiked, setIsLiked] = useState<boolean>(false);
+    const [isRetweeted, setIsRetweeted] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
 
     const fetchUserById = async (id: string): Promise<void> => {
@@ -53,14 +54,28 @@ export default function Post({ post, replies, retweets, likes }: Props) {
         }
     }
 
+    const reTweet = async (id: string): Promise<void> => {
+        try {
+            await tweetService.reTweet(id);
+            window.location.reload()
+        } catch (error) {
+            const message = (error as Error).message;
+            throw new Error(message);
+        }
+    }
+
     useEffect(() => {
         fetchUserById(post.createdBy);
         setIsLiked((prevIsLiked) => {
             const newIsLiked = post?.likes.some((like) => like === user?._id);
             return prevIsLiked !== newIsLiked ? newIsLiked : prevIsLiked;
         });
+        setIsRetweeted((prevIsRetweeted) => {
+            const newIsRetweeted = post?.retweets.some((retweet) => retweet === user?._id);
+            return prevIsRetweeted !== newIsRetweeted ? newIsRetweeted : prevIsRetweeted;
+        });
         fetchUser();
-    }, [post.createdBy, post?.likes, user?._id]);
+    }, [post.createdBy, post?.likes, post?.retweets, user?._id]);
 
     const styledDesc: string = post?.desc?.replace(/#(\w+)/g, '<span class="text-blue-500">#$1</span>');
     return (
@@ -92,11 +107,13 @@ export default function Post({ post, replies, retweets, likes }: Props) {
                             <p className="text-xs group-hover:text-sky-500">{replies}</p>
                         </div>
                         <div className="flex gap-1 items-center group tabletpx-4">
-                            <Rune
-                                Icon={<RetweetIcon fill="group-hover:fill-green-500" />}
-                                color="group-hover:bg-green-100"
-                            />
-                            <p className="text-xs group-hover:text-green-500">{retweets}</p>
+                            <button onClick={() => reTweet(post._id)}>
+                                <Rune
+                                    Icon={<RetweetIcon fill={`group-hover:fill-green-500 ${isRetweeted ? 'fill-green-500' : ''}`} />}
+                                    color="group-hover:bg-green-100"
+                                />
+                            </button>
+                            <p className={`text-xs group-hover:text-green-500 ${isRetweeted ? 'text-green-500' : ''}`}>{retweets}</p>
                         </div>
                         <div className="flex gap-1 items-center group tabletpx-4">
                             <button onClick={() => likeTweet(post._id)}>
@@ -122,9 +139,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
                         className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
                     >
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                            {/*content*/}
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                {/*header*/}
                                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                     <h3 className="text-3xl font-semibold">
                                         Modal Title

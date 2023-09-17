@@ -18,6 +18,7 @@ import { SearchIcon } from '@heroicons/react/outline'
 import { ViewBoardsIcon } from '@heroicons/react/solid'
 import axios from "axios"
 import Cookies from "js-cookie"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 
 export default function Home() {
@@ -110,9 +111,11 @@ export default function Home() {
                 <h1 className="text-[1.25rem] font-bold">Home</h1>
               </section>
               <section className="px-4 py-4 grid grid-cols-[auto,1fr] gap-4 ">
-                {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} />
-                  : <Avatar src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="Avatar" />
-                }
+                <Link href="/profile">
+                  {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} />
+                    : <Avatar src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="Avatar" />
+                  }
+                </Link>
                 <div className="space-y-10 w-full">
                   <div className="flex-1">
                     <input

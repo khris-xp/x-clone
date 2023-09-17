@@ -12,4 +12,5 @@ export interface ITweetService {
     updateTweets: (id: string, data: ITweetRequest) => Promise<ITweetResponse>;
     deleteTweet: (id: string) => Promise<ITweetResponse>;
     likeTweet: (id: string) => Promise<ITweetResponse>;
+    reTweet: (id: string) => Promise<ITweetResponse>;
 }
