@@ -88,7 +88,7 @@ export default function Home() {
 
       const token = Cookies.get("token");
 
-      const response = await axios.post(`${baseUrl}/api/upload`, formData, {
+      const response = await axios.post(`${baseUrl}api/upload`, formData, {
         headers: { 'content-type': 'multipart/form-data', Authorization: token }
       })
       setTweet(prevTweet => ({
