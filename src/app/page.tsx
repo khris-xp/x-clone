@@ -7,7 +7,6 @@ import LeftSideBar from "@/components/LeftSideBar"
 import Post from "@/components/Post"
 import Rune from "@/components/Rune"
 import Trend from "@/components/Trend"
-import { follow } from "@/constants/follow"
 import trends from "@/constants/trend"
 import { ITweet, ITweetRequest } from "@/interfaces/tweet"
 import { IUser } from "@/interfaces/user"
@@ -23,6 +22,7 @@ import { useEffect, useState } from "react"
 
 export default function Home() {
   let [userData, setUserData] = useState<IUser | null>(null);
+  let [user, setUser] = useState<IUser[]>([]);
   const [createTweet, setCreateTweet] = useState<boolean>(false);
   let [tweetData, setTweetData] = useState<ITweet[]>([]);
   let [tweet, setTweet] = useState<ITweetRequest>({
@@ -36,6 +36,15 @@ export default function Home() {
       setUserData(response);
     } catch (error) {
       window.location.href = '/login'
+    }
+  }
+
+  const fetchAllUser = async () => {
+    try {
+      const response = await authService.getAllUsers();
+      setUser(response);
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -79,7 +88,7 @@ export default function Home() {
 
       const token = Cookies.get("token");
 
-      const response = await axios.post(`${baseUrl}api/upload`, formData, {
+      const response = await axios.post(`${baseUrl}/api/upload`, formData, {
         headers: { 'content-type': 'multipart/form-data', Authorization: token }
       })
       setTweet(prevTweet => ({
@@ -100,6 +109,7 @@ export default function Home() {
     } else {
       setCreateTweet(false);
     }
+    fetchAllUser();
   }, [tweet.desc])
   return (
     <>
@@ -194,8 +204,8 @@ export default function Home() {
               <section className="bg-gray-50 py-4 rounded-2xl sticky -top-80">
                 <h1 className="text-[1.25rem] font-black px-4 pb-4">Who to follow</h1>
                 <div>
-                  {follow.map((follow) => (
-                    <Follow key={follow.id} follow={follow} />
+                  {user?.map((follow) => (
+                    <Follow key={follow._id} follow={follow} />
                   ))}
                 </div>
               </section >

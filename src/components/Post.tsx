@@ -42,19 +42,32 @@ export default function Post({ post, replies, retweets, likes }: Props) {
         }
     }
 
-    const likeTweet = async (id: string): Promise<void> => {
+    const handleLike = async (id: string): Promise<void> => {
         try {
-            await tweetService.likeTweet(id);
-            window.location.reload()
+            if (isLiked) {
+                await tweetService.unLikeTweet(id);
+                window.location.reload()
+            }
+            else {
+                await tweetService.likeTweet(id);
+                window.location.reload()
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
-    const reTweet = async (id: string): Promise<void> => {
+    const handleRetweet = async (id: string): Promise<void> => {
         try {
-            await tweetService.reTweet(id);
-            window.location.reload()
+            if (isRetweeted) {
+                await tweetService.unReTweet(id);
+                window.location.reload()
+            }
+            else {
+                await tweetService.reTweet(id);
+                setIsRetweeted(true);
+                window.location.reload()
+            }
         } catch (error) {
             console.log(error)
         }
@@ -103,7 +116,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
                             <p className="text-xs group-hover:text-sky-500">{replies}</p>
                         </div>
                         <div className="flex gap-1 items-center group tabletpx-4">
-                            <button onClick={() => reTweet(post._id)}>
+                            <button onClick={() => handleRetweet(post._id)}>
                                 <Rune
                                     Icon={<RetweetIcon fill={`group-hover:fill-green-500 ${isRetweeted ? 'fill-green-500' : ''}`} />}
                                     color="group-hover:bg-green-100"
@@ -112,7 +125,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
                             <p className={`text-xs group-hover:text-green-500 ${isRetweeted ? 'text-green-500' : ''}`}>{retweets}</p>
                         </div>
                         <div className="flex gap-1 items-center group tabletpx-4">
-                            <button onClick={() => likeTweet(post._id)}>
+                            <button onClick={() => handleLike(post._id)}>
                                 <Rune
                                     Icon={<LikeIcon fill={`group-hover:fill-rose-500 ${isLiked ? 'fill-rose-500' : ''}`} />}
                                     color='group-hover:bg-rose-100'

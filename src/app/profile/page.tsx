@@ -4,7 +4,6 @@ import Follow from "@/components/Follow"
 import LeftSideBar from "@/components/LeftSideBar"
 import Post from "@/components/Post"
 import Trend from "@/components/Trend"
-import { follow } from "@/constants/follow"
 import trends from "@/constants/trend"
 import { formatJoinedDate } from "@/hooks/format"
 import { ITweet } from "@/interfaces/tweet"
@@ -18,6 +17,7 @@ import { useEffect, useState } from "react"
 
 export default function Home() {
     let [userData, setUserData] = useState<IUser | null>(null);
+    let [user, setUser] = useState<IUser[]>([]);
     let [tweetData, setTweetData] = useState<ITweet[]>([]);
     const coverImage = userData?.coverPicture || 'https://pbs.twimg.com/profile_banners/2161323234/1585151401/600x200';
 
@@ -25,6 +25,15 @@ export default function Home() {
         try {
             const response = await authService.getUserProfile();
             setUserData(response);
+        } catch (error) {
+            window.location.href = '/login'
+        }
+    }
+
+    const fetchAllUser = async (): Promise<void> => {
+        try {
+            const response = await authService.getAllUsers();
+            setUser(response);
         } catch (error) {
             console.log(error)
         }
@@ -35,13 +44,14 @@ export default function Home() {
             const response = await tweetService.getTweetByUser(id);
             setTweetData(response.tweets);
         } catch (error) {
-            console.log(error)
+            window.location.href = '/login'
         }
     }
 
     useEffect(() => {
         fecthUserProfile();
         fecthTweetByUser(userData?._id);
+        fetchAllUser();
     }, [userData?._id])
     return (
         <>
@@ -139,8 +149,8 @@ export default function Home() {
                             <section className="bg-gray-50 py-4 rounded-2xl sticky -top-80">
                                 <h1 className="text-[1.25rem] font-black px-4 pb-4">Who to follow</h1>
                                 <div>
-                                    {follow.map((follow) => (
-                                        <Follow key={follow.id} follow={follow} />
+                                    {user?.map((follow) => (
+                                        <Follow key={follow._id} follow={follow} />
                                     ))}
                                 </div>
                             </section >

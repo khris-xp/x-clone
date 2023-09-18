@@ -1,8 +1,8 @@
-import { IFollow } from "@/interfaces/follow"
+import { IUser } from "@/interfaces/user"
 import Image from "next/image"
 
 type Props = {
-    follow: IFollow
+    follow: IUser
 }
 
 export default function Follow({ follow }: Props) {
@@ -10,11 +10,11 @@ export default function Follow({ follow }: Props) {
         <div className="flex items-center">
             <div className="flex items-center w-48">
                 <div>
-                    <Image className="inline-block h-10 w-auto rounded-full ml-4 mt-2" src={follow.image} alt="" width={1000} height={1000} />
+                    <Image className="inline-block h-10 w-auto rounded-full ml-4 mt-2" src={follow.profilePicture ? follow.profilePicture : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'} alt="" width={1000} height={1000} />
                 </div>
                 <div className="ml-3 mt-3">
                     <p className="text-base leading-6 font-medium text-black">
-                        {follow.name}
+                        {follow.fullName}
                     </p>
                     <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
                         {follow.username}

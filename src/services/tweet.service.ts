@@ -15,6 +15,10 @@ export const tweetService: ITweetService = {
         apiRequest<ITweetResponse>(`/api/tweet/${id}`, 'delete'),
     likeTweet: async (id: string): Promise<ITweetResponse> =>
         apiRequest<ITweetResponse>(`/api/tweet/${id}/like`, 'post'),
+    unLikeTweet: async (id: string): Promise<ITweetResponse> =>
+        apiRequest<ITweetResponse>(`/api/tweet/${id}/unlike`, 'post'),
     reTweet: async (id: string): Promise<ITweetResponse> =>
         apiRequest<ITweetResponse>(`/api/tweet/${id}/retweet`, 'post'),
+    unReTweet: async (id: string): Promise<ITweetResponse> =>
+        apiRequest<ITweetResponse>(`/api/tweet/${id}/unretweet`, 'post'),
 };

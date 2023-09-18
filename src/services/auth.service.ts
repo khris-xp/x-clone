@@ -12,4 +12,6 @@ export const authService: IAuthService = {
         apiRequest<IUser>('/user/profile', 'get'),
     getUserById: async (id: string): Promise<IUser> =>
         apiRequest<IUser>(`/user/users/${id}`, 'get'),
+    getAllUsers: async (): Promise<IUser[]> =>
+        apiRequest<IUser[]>('/user', 'get'),
 };
