@@ -150,7 +150,7 @@ export default function Home() {
                                 <h1 className="text-[1.25rem] font-black px-4 pb-4">Who to follow</h1>
                                 <div>
                                     {user?.map((follow) => (
-                                        <Follow key={follow._id} follow={follow} />
+                                        <Follow key={follow._id} follow={follow} userFollowings={userData?.followings} />
                                     ))}
                                 </div>
                             </section >

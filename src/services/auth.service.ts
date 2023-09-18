@@ -14,4 +14,10 @@ export const authService: IAuthService = {
         apiRequest<IUser>(`/user/users/${id}`, 'get'),
     getAllUsers: async (): Promise<IUser[]> =>
         apiRequest<IUser[]>('/user', 'get'),
+    followUser: async (id: string): Promise<IUser> =>
+        apiRequest<IUser>(`/user/follow/${id}`, 'post'),
+    unFollowUser: async (id: string): Promise<IUser> =>
+        apiRequest<IUser>(`/user/unfollow/${id}`, 'post'),
+    getAllFollwings: async (): Promise<IUser[]> =>
+        apiRequest<IUser[]>('/user/followings', 'get'),
 };

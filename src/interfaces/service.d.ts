@@ -4,6 +4,9 @@ export interface IAuthService {
     getUserProfile: () => Promise<IUser>;
     getUserById: (id: string) => Promise<IUser>;
     getAllUsers: () => Promise<IUser[]>;
+    followUser: (id: string) => Promise<IUser>;
+    unFollowUser: (id: string) => Promise<IUser>;
+    getAllFollwings: () => Promise<IUser[]>;
 }
 
 export interface ITweetService {

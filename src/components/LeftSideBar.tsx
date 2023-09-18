@@ -45,7 +45,7 @@ export default function LeftSideBar() {
                     <div className="flex flex-col gap-5 items-center desktop:items-stretch w-full">
                         <div className="px-4">
                             <div className='w-7 h-7'>
-                                <Image src='/twitter-logo.png' alt="Logo" className="w-full" width={1000} height={1000} />
+                                <Image src='/logo.png' alt="Logo" className="w-full" width={1000} height={1000} />
                             </div>
                         </div>
                         <div className="space-y-3">
