@@ -5,6 +5,7 @@ import { authService } from "@/services/auth.service";
 import { tweetService } from "@/services/tweet.service";
 import { DotsHorizontalIcon } from "@heroicons/react/outline";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import { LikeIcon, ReplyIcon, RetweetIcon, ShareIcon } from "./Icons";
@@ -95,9 +96,11 @@ export default function Post({ post, replies, retweets, likes }: Props) {
     return (
         <div className="border-t-[1px] px-4 pt-3 pb-2 hover:bg-neutral-100 transition-colors duration-500 ease-out">
             <div className="grid grid-cols-[auto,1fr] gap-3">
-                {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} />
-                    : <Avatar src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="Avatar" />
-                }
+                <Link href={userData?._id === user?._id ? '/profile' : `/profile/${userData?._id}`}>
+                    {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} />
+                        : <Avatar src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="Avatar" />
+                    }
+                </Link>
                 <div>
                     <div className="flex gap-1 items-center">
                         <h1 className="font-bold">{userData?.fullName ? userData?.fullName : 'AI User'}</h1>

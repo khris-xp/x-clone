@@ -30,7 +30,7 @@ export default function Home() {
     img: ''
   });
 
-  const fecthUserProfile = async () => {
+  const fetchUserProfile = async () => {
     try {
       const response = await authService.getUserProfile();
       setUserData(response);
@@ -48,7 +48,7 @@ export default function Home() {
     }
   }
 
-  const fecthTweet = async (): Promise<void> => {
+  const fetchTweet = async (): Promise<void> => {
     try {
       const response = await tweetService.getTweets();
       setTweetData(response.tweets);
@@ -88,7 +88,7 @@ export default function Home() {
 
       const token = Cookies.get("token");
 
-      const response = await axios.post(`${baseUrl}api/upload`, formData, {
+      const response = await axios.post(`${baseUrl}/api/upload`, formData, {
         headers: { 'content-type': 'multipart/form-data', Authorization: token }
       })
       setTweet(prevTweet => ({
@@ -102,8 +102,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fecthUserProfile();
-    fecthTweet();
+    fetchUserProfile();
+    fetchTweet();
     if (tweet.desc.length > 0) {
       setCreateTweet(true);
     } else {
@@ -124,7 +124,7 @@ export default function Home() {
               <section className="px-4 py-4 grid grid-cols-[auto,1fr] gap-4 ">
                 <Link href="/profile">
                   {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} />
-                    : <Avatar src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="Avatar" />
+                    : <Avatar src="https://avatars.githubusercontent.com/u/84142253?v=4" alt="Avatar" />
                   }
                 </Link>
                 <div className="space-y-10 w-full">
@@ -177,9 +177,19 @@ export default function Home() {
                 </div>
               </section>
               <section>
-                {tweetData.map((post) => (
-                  <Post key={post._id} post={post} replies={0} retweets={post?.retweets?.length} likes={post?.likes?.length} />
-                ))}
+                {tweetData.length !== 0 ? (tweetData.map((tweet) => (
+                  <Post key={tweet._id} post={tweet} replies={0} retweets={tweet?.retweets?.length || 0}
+                    likes={tweet?.likes?.length || 0} />))
+                ) : (
+                  <div>
+                    <h1 className="text-center text-2xl font-bold mt-20">Please Login first to see tweet</h1>
+                    <Link href="/login">
+                      <div className="text-center text-2xl font-bold mt-5 text-sky-500 hover:underline">
+                        Login
+                      </div>
+                    </Link>
+                  </div>
+                )}
               </section>
             </div>
             <div className="laptop:block hidden px-8 space-y-2">
@@ -223,7 +233,6 @@ export default function Home() {
           </div>
         </main>
       </div>
-
     </>
   )
 }

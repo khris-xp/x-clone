@@ -10,27 +10,32 @@ import { ITweet } from "@/interfaces/tweet"
 import { IUser } from "@/interfaces/user"
 import { authService } from "@/services/auth.service"
 import { tweetService } from "@/services/tweet.service"
-import { SearchIcon } from '@heroicons/react/outline'
+import { SearchIcon } from "@heroicons/react/outline"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-export default function Home() {
-    let [userData, setUserData] = useState<IUser | null>(null);
-    let [user, setUser] = useState<IUser[]>([]);
-    let [tweetData, setTweetData] = useState<ITweet[]>([]);
-    const coverImage = userData?.coverPicture || 'https://pbs.twimg.com/profile_banners/2161323234/1585151401/600x200';
+interface PageProps {
+    params: {
+        id: string
+    }
+}
 
-    const fecthUserProfile = async (): Promise<void> => {
+export default function ProfileByIdPage({ params }: PageProps) {
+    const [userData, setUserData] = useState<IUser | null>(null);
+    const [user, setUser] = useState<IUser[]>([]);
+    const [tweetData, setTweetData] = useState<ITweet[]>([]);
+
+    const getTweetByUser = async (id: string) => {
         try {
-            const response = await authService.getUserProfile();
-            setUserData(response);
+            const response = await tweetService.getTweetByUser(id);
+            setTweetData(response.tweets);
         } catch (error) {
-            window.location.href = '/login'
+            console.log(error)
         }
     }
 
-    const fetchAllUser = async (): Promise<void> => {
+    const getAllUsers = async () => {
         try {
             const response = await authService.getAllUsers();
             setUser(response);
@@ -39,20 +44,22 @@ export default function Home() {
         }
     }
 
-    const fecthTweetByUser = async (id: string | undefined): Promise<void> => {
+    const getUserById = async (id: string) => {
         try {
-            const response = await tweetService.getTweetByUser(id);
-            setTweetData(response.tweets);
+            const response = await authService.getUserById(id);
+            setUserData(response);
         } catch (error) {
-            window.location.href = '/login'
+            console.log(error)
         }
     }
 
     useEffect(() => {
-        fecthUserProfile();
-        fecthTweetByUser(userData?._id);
-        fetchAllUser();
-    }, [userData?._id])
+        getTweetByUser(params.id)
+        getUserById(params.id)
+        getAllUsers()
+    }, [params.id])
+
+    const coverImage = userData?.coverPicture || 'https://pbs.twimg.com/profile_banners/2161323234/1585151401/600x200';
     return (
         <>
             <div className="grid-cols-[auto,1fr] desktop:max-w-7xl laptop:max-w-5xl max-w-2xl mx-auto">
@@ -89,7 +96,7 @@ export default function Home() {
                                         <div className="flex flex-1">
                                             <div className="-mt-24">
                                                 <div className="w-36 h-36 rounded-full relative">
-                                                    <Image className="w-36 h-36 rounded-full relative border border-gray-300" src={userData?.profilePicture ? userData.profilePicture : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} width={1000} height={1000} alt="" />
+                                                    <Image className="w-36 h-36 rounded-full relative border border-gray-300" src={userData?.profilePicture ? userData.profilePicture : "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png"} width={1000} height={1000} alt="" />
                                                     <div className="absolute"></div>
                                                 </div>
                                             </div>

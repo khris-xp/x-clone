@@ -59,7 +59,7 @@ export default function LeftSideBar() {
                             <Path Icon={DotsCircleHorizontalIcon} name="More" active={false} />
                         </div>
                         <button onClick={() => logout()} className="bg-sky-500 p-3 desktop:py-4 text-base font-bold text-white rounded-full max-w-[13.75rem] hover:bg-sky-400 hover-transition">
-                            <span className="desktop:block hidden">Logout</span>
+                            <span className="desktop:block hidden">{userData ? "Logout" : 'Login'}</span>
                             <div className="desktop:hidden w-6 h-6">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" fill="#F8FAFC">
                                     <g>
@@ -70,16 +70,18 @@ export default function LeftSideBar() {
                         </button>
                     </div>
                     <Link href='/profile'>
-                        <div className='flex items-center justify-between desktop:w-[17rem] hover:bg-neutral-200 desktop:px-4 px-3 py-3 rounded-full hover-transition cursor-pointer'>
-                            <div className="flex items-center gap-4">
-                                {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} /> : <Avatar src='https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png' alt='user-profile' />}
-                                <div className='desktop:block hidden'>
-                                    <h1 className="font-bold text-lg">{userData?.fullName ? userData.fullName : 'AI User'}</h1>
-                                    <h2 className="text-neutral-500 -mt-1">@{userData?.username}</h2>
+                        {userData && (
+                            <div className='flex items-center justify-between desktop:w-[17rem] hover:bg-neutral-200 desktop:px-4 px-3 py-3 rounded-full hover-transition cursor-pointer'>
+                                <div className="flex items-center gap-4">
+                                    {userData?.profilePicture ? <Avatar src={userData?.profilePicture} alt={userData?.username} /> : <Avatar src='https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png' alt='user-profile' />}
+                                    <div className='desktop:block hidden'>
+                                        <h1 className="font-bold text-lg">{userData?.fullName ? userData.fullName : 'AI User'}</h1>
+                                        <h2 className="text-neutral-500 -mt-1">@{userData?.username}</h2>
+                                    </div>
                                 </div>
+                                <DotsHorizontalIcon className="w-4 h-4 text-neutral-500 desktop:block hidden" />
                             </div>
-                            <DotsHorizontalIcon className="w-4 h-4 text-neutral-500 desktop:block hidden" />
-                        </div>
+                        )}
                     </Link>
                 </nav>
             </div>
