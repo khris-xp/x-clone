@@ -53,7 +53,7 @@ export default function Home() {
       const response = await tweetService.getTweets();
       setTweetData(response.tweets);
     } catch (error) {
-      window.location.href = '/login'
+      console.log(error)
     }
   }
 

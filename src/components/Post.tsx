@@ -23,6 +23,8 @@ export default function Post({ post, replies, retweets, likes }: Props) {
     const [isLiked, setIsLiked] = useState<boolean>(false);
     const [isRetweeted, setIsRetweeted] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
+    const [liked, setLiked] = useState<number>(likes);
+    const [retweeted, setRetweeted] = useState<number>(retweets);
 
     const fetchUserById = async (id: string): Promise<void> => {
         try {
@@ -46,11 +48,13 @@ export default function Post({ post, replies, retweets, likes }: Props) {
         try {
             if (isLiked) {
                 await tweetService.unLikeTweet(id);
-                window.location.reload()
+                setIsLiked(false);
+                setLiked(liked - 1);
             }
             else {
                 await tweetService.likeTweet(id);
-                window.location.reload()
+                setIsLiked(true);
+                setLiked(liked + 1);
             }
         } catch (error) {
             console.log(error)
@@ -61,12 +65,13 @@ export default function Post({ post, replies, retweets, likes }: Props) {
         try {
             if (isRetweeted) {
                 await tweetService.unReTweet(id);
-                window.location.reload()
+                setIsRetweeted(false);
+                setRetweeted(retweeted - 1);
             }
             else {
                 await tweetService.reTweet(id);
                 setIsRetweeted(true);
-                window.location.reload()
+                setRetweeted(retweeted + 1);
             }
         } catch (error) {
             console.log(error)
@@ -86,7 +91,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
         fetchUser();
     }, [post.createdBy, post?.likes, post?.retweets, user?._id]);
 
-    const styledDesc: string = post?.desc?.replace(/#(\w+)/g, '<span class="text-blue-500">#$1</span>');
+    const styledDesc: string = post?.desc?.replace(/#([\p{Script=Thai}\w]+)/gu, '<span class="text-blue-500">#$1</span>');
     return (
         <div className="border-t-[1px] px-4 pt-3 pb-2 hover:bg-neutral-100 transition-colors duration-500 ease-out">
             <div className="grid grid-cols-[auto,1fr] gap-3">
@@ -98,7 +103,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
                         <h1 className="font-bold">{userData?.fullName ? userData?.fullName : 'AI User'}</h1>
                         <h2 className="text-neutral-500 hidden mobile:block">@{userData?.username}</h2>
                         <span className="text-neutral-500 font-extralight">•</span>
-                        <h2 className="text-neutral-500">{formatDateDifference(post.createdAt)}.</h2>
+                        <h2 className="text-neutral-500">{formatDateDifference(post.createdAt)}</h2>
                         <div className="p-2 hover:bg-sky-100 ml-auto rounded-full group cursor-pointer transition-colors duration-500 ease-out">
                             <button onClick={() => setShowModal(true)}>
                                 <DotsHorizontalIcon className="w-4 h-4 text-neutral-400 group-hover:text-sky-500" />
@@ -122,7 +127,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
                                     color="group-hover:bg-green-100"
                                 />
                             </button>
-                            <p className={`text-xs group-hover:text-green-500 ${isRetweeted ? 'text-green-500' : ''}`}>{retweets}</p>
+                            <p className={`text-xs group-hover:text-green-500 ${isRetweeted ? 'text-green-500' : ''}`}>{retweeted}</p>
                         </div>
                         <div className="flex gap-1 items-center group tabletpx-4">
                             <button onClick={() => handleLike(post._id)}>
@@ -131,7 +136,7 @@ export default function Post({ post, replies, retweets, likes }: Props) {
                                     color='group-hover:bg-rose-100'
                                 />
                             </button>
-                            <p className={`text-xs group-hover:text-rose-500 ${isLiked ? 'text-rose-500' : ''}`}>{likes}</p>
+                            <p className={`text-xs group-hover:text-rose-500 ${isLiked ? 'text-rose-500' : ''}`}>{liked}</p>
                         </div>
                         <div className="flex gap-1 items-center group tabletpl-4">
                             <Rune

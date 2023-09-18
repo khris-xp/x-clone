@@ -10,7 +10,7 @@ export function formatDateDifference(dateString: string): string {
 
     let formattedDate = '';
     if (days === 0 && hours === 0 && minutes === 0) {
-        formattedDate = `${minutes}min`;
+        formattedDate = 'now';
     } else if (days > 0) {
         formattedDate = `${days}d`;
     } else if (days === 0 && hours > 0) {
